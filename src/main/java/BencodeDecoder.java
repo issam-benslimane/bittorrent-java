@@ -1,5 +1,7 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class BencodeDecoder {
     private String encodedValue;
@@ -13,6 +15,7 @@ public class BencodeDecoder {
         if (Character.isDigit(encodedValue.charAt(current))) return decodeString();
         if (encodedValue.charAt(current) == 'i') return decodeInteger();
         if (encodedValue.charAt(current) == 'l') return decodeList();
+        if (encodedValue.charAt(current) == 'd') return decodeDictionary();
         return null;
     }
 
@@ -50,6 +53,18 @@ public class BencodeDecoder {
         }
         current++;
         return list;
+    }
+
+    private Map<String, Object> decodeDictionary(){
+        Map<String, Object> dictionary = new HashMap<>();
+        current++;
+        while (encodedValue.charAt(current) != 'e'){
+            String k = decode().toString();
+            Object v = decode();
+            dictionary.put(k, v);
+        }
+        current++;
+        return dictionary;
     }
 }
 

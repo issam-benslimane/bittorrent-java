@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class BencodeDecoder {
     private String encodedValue;
     private int current = 0;
@@ -9,6 +12,7 @@ public class BencodeDecoder {
     public Object decode(){
         if (Character.isDigit(encodedValue.charAt(current))) return decodeString();
         if (encodedValue.charAt(current) == 'i') return decodeInteger();
+        if (encodedValue.charAt(current) == 'l') return decodeList();
         return null;
     }
 
@@ -34,8 +38,18 @@ public class BencodeDecoder {
                 break;
             }
         }
-        current = end;
+        current = end + 1;
         return Long.parseLong(encodedValue.substring(start, end));
+    }
+
+    private List<Object> decodeList(){
+        List<Object> list = new ArrayList<>();
+        current++;
+        while (encodedValue.charAt(current) != 'e'){
+            list.add(decode());
+        }
+        current++;
+        return list;
     }
 }
 

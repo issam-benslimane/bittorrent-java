@@ -12,8 +12,15 @@ public class BencodeDecoder {
 
     private String decodeString(){
         if (!Character.isDigit(encodedValue.charAt(current))) return null;
-        int length = encodedValue.charAt(current) - '0';
-        int start = current+2, end = start+length;
+        int delimeterIndex = 0;
+        for (int i = current; i < encodedValue.length(); i++) {
+            if (encodedValue.charAt(i) == ':') {
+                delimeterIndex = i;
+                break;
+            }
+        }
+        int length = Integer.parseInt(encodedValue.substring(current, delimeterIndex));
+        int start = delimeterIndex+1, end = start + length;
         current = end;
         return encodedValue.substring(start, end);
     }

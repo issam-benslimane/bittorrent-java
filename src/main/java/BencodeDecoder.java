@@ -6,12 +6,13 @@ public class BencodeDecoder {
         this.encodedValue = encodedValue;
     }
 
-    public String decode(){
-        return decodeString();
+    public Object decode(){
+        if (Character.isDigit(encodedValue.charAt(current))) return decodeString();
+        if (encodedValue.charAt(current) == 'i') return decodeInteger();
+        return null;
     }
 
     private String decodeString(){
-        if (!Character.isDigit(encodedValue.charAt(current))) return null;
         int delimeterIndex = 0;
         for (int i = current; i < encodedValue.length(); i++) {
             if (encodedValue.charAt(i) == ':') {
@@ -23,6 +24,18 @@ public class BencodeDecoder {
         int start = delimeterIndex+1, end = start + length;
         current = end;
         return encodedValue.substring(start, end);
+    }
+
+    private Long decodeInteger(){
+        int start = current+1, end = 0;
+        for (int i = start; i < encodedValue.length(); i++) {
+            if (encodedValue.charAt(i) == 'e') {
+                end = i;
+                break;
+            }
+        }
+        current = end;
+        return Long.parseLong(encodedValue.substring(start, end));
     }
 }
 

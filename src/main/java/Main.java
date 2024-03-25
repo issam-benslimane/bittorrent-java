@@ -11,7 +11,7 @@ public class Main {
     if("decode".equals(command)) {
       //  Uncomment this block to pass the first stage
         String bencodedValue = args[1];
-        String decoded;
+        Object decoded;
         try {
           BencodeDecoder decoder = new BencodeDecoder(bencodedValue);
           decoded = decoder.decode();
@@ -25,22 +25,6 @@ public class Main {
       System.out.println("Unknown command: " + command);
     }
 
-  }
-
-  static String decodeBencode(String bencodedString) {
-    if (Character.isDigit(bencodedString.charAt(0))) {
-      int firstColonIndex = 0;
-      for(int i = 0; i < bencodedString.length(); i++) { 
-        if(bencodedString.charAt(i) == ':') {
-          firstColonIndex = i;
-          break;
-        }
-      }
-      int length = Integer.parseInt(bencodedString.substring(0, firstColonIndex));
-      return bencodedString.substring(firstColonIndex+1, firstColonIndex+1+length);
-    } else {
-      throw new RuntimeException("Only strings are supported at the moment");
-    }
   }
   
 }

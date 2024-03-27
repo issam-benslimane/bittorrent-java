@@ -84,9 +84,10 @@ public class Bdecoder {
         List<Object> list = new ArrayList<>();
         int next = in.read();
         if (next != 'l') throw new RuntimeException("");
-        while (next != 'e'){
-            list.add(decodeNext());
+        while (true){
             next = peek();
+            if (next == 'e') break;
+            list.add(decodeNext());
         }
         next = in.read();
         return list;
@@ -96,11 +97,12 @@ public class Bdecoder {
         Map<String, Object> map = new HashMap<>();
         int next = in.read();
         if (next != 'd') throw new RuntimeException("");
-        while (next != 'e'){
+        while (true){
+            next = peek();
+            if (next == 'e') break;
             String k = toCamelCase(readString());
             Object v = decodeNext();
             map.put(k, v);
-            next = peek();
         }
         next = in.read();
         return map;

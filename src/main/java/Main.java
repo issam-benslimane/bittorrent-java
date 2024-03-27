@@ -1,4 +1,6 @@
 import Bencode.Bdecoder;
+import Torrent.Torrent;
+import Torrent.TorrentParser;
 import com.google.gson.Gson;
 
 import java.io.File;
@@ -27,14 +29,17 @@ public class Main {
 
     } else if (command.equals("info")) {
         File file = new File(args[1]);
-        Object decoded = null;
+        Torrent torrent = null;
         try (FileInputStream fis = new FileInputStream(file)) {
-            Bdecoder b = new Bdecoder(fis, true);
-            decoded = b.getDecoded();
+            TorrentParser parser = new TorrentParser(fis);
+            torrent = parser.getTorrent();
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
-        System.out.println(gson.toJson(decoded));
+        if (torrent != null){
+            System.out.println("Tracker URL: " + torrent.getAnnounce());
+            System.out.println("Length: " + torrent.getInfo().getLength());
+        }
     } else {
       System.out.println("Unknown command: " + command);
     }

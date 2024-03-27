@@ -1,5 +1,9 @@
+import Bencode.Bdecoder;
 import com.google.gson.Gson;
-// import com.dampcake.bencode.Bencode; - available if you need it!
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 
 public class Main {
   private static final Gson gson = new Gson();
@@ -13,14 +17,24 @@ public class Main {
         String bencodedValue = args[1];
         Object decoded;
         try {
-          BencodeDecoder decoder = new BencodeDecoder(bencodedValue);
-          decoded = decoder.decode();
+            Bdecoder b = new Bdecoder(bencodedValue.getBytes());
+            decoded = b.getDecoded();
         } catch(RuntimeException e) {
           System.out.println(e.getMessage());
           return;
         }
         System.out.println(gson.toJson(decoded));
 
+    } else if (command.equals("info")) {
+        File file = new File(args[1]);
+        Object decoded = null;
+        try (FileInputStream fis = new FileInputStream(file)) {
+            Bdecoder b = new Bdecoder(fis, true);
+            decoded = b.getDecoded();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+        System.out.println(gson.toJson(decoded));
     } else {
       System.out.println("Unknown command: " + command);
     }

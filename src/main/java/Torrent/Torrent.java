@@ -33,6 +33,15 @@ public class Torrent {
         private String name;
         private long pieceLength;
         private Piece[] pieces;
+        private String hash;
+
+        public String getHash() {
+            return hash;
+        }
+
+        public void setHash(String hash) {
+            this.hash = hash;
+        }
 
         public long getLength() {
             return length;

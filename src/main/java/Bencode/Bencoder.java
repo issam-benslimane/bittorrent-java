@@ -34,7 +34,8 @@ public class Bencoder {
         try {
             if (obj instanceof String) writeString((String) obj);
             else if(obj instanceof byte[]) writeStringBytes((byte[]) obj);
-            else if (obj instanceof Integer) writeInteger((int) obj);
+            else if (obj instanceof Integer) writeInteger((long) obj);
+            else if (obj instanceof Long) writeInteger((long) obj);
             else if (obj instanceof List) writeList((List<?>) obj);
             else if (obj instanceof Map) writeDictionary((Map<String, ?>) obj);
             else throw new RuntimeException("Unsupported Type.");
@@ -59,7 +60,7 @@ public class Bencoder {
         }
     }
 
-    private void writeInteger(int n) throws IOException {
+    private void writeInteger(long n) throws IOException {
         encoded.add((byte) 'i');
         String s = String.valueOf(n);
         for (int i = 0; i < s.length(); i++) {
@@ -80,11 +81,19 @@ public class Bencoder {
         Map<String, ?> orderedMap = new TreeMap<>(obj);
         encoded.add((byte) 'd');
         for (Map.Entry<String, ?> entry : orderedMap.entrySet()) {
-            String k = entry.getKey();
+            String k = camelCaseToSpaces(entry.getKey());
             Object v = entry.getValue();
             encode(k);
             encode(v);
         }
         encoded.add((byte) 'e');
+    }
+
+    private String camelCaseToSpaces(String s){
+        String spacedString = s.replaceAll("(\\p{Lu})", " $1");
+        if (!Character.isUpperCase(spacedString.charAt(0))) {
+            spacedString = spacedString.charAt(0) + spacedString.substring(1);
+        }
+        return spacedString.toLowerCase();
     }
 }

@@ -39,6 +39,7 @@ public class Main {
         if (torrent != null){
             System.out.println("Tracker URL: " + torrent.getAnnounce());
             System.out.println("Length: " + torrent.getInfo().getLength());
+            System.out.println("Info Hash: " + torrent.getInfo().getHash());
         }
     } else {
       System.out.println("Unknown command: " + command);

@@ -1,6 +1,7 @@
 import Bencode.Bdecoder;
 import Torrent.Torrent;
 import Torrent.TorrentParser;
+import Torrent.Piece;
 import com.google.gson.Gson;
 
 import java.io.File;
@@ -40,6 +41,10 @@ public class Main {
             System.out.println("Tracker URL: " + torrent.getAnnounce());
             System.out.println("Length: " + torrent.getInfo().getLength());
             System.out.println("Info Hash: " + torrent.getInfo().getHash());
+            System.out.println("Piece Hashes:");
+            for (Piece piece: torrent.getInfo().getPieces()){
+                System.out.println(piece.getHash());
+            }
         }
     } else {
       System.out.println("Unknown command: " + command);

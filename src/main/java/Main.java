@@ -41,8 +41,10 @@ public class Main {
             System.out.println("Tracker URL: " + torrent.getAnnounce());
             System.out.println("Length: " + torrent.getInfo().getLength());
             System.out.println("Info Hash: " + torrent.getInfo().getHash());
+            Piece[] pieces = torrent.getInfo().getPieces();
+            System.out.println("Piece Length: " + pieces[0].getLength());
             System.out.println("Piece Hashes:");
-            for (Piece piece: torrent.getInfo().getPieces()){
+            for (Piece piece: pieces){
                 System.out.println(piece.getHash());
             }
         }

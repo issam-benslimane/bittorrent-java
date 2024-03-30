@@ -3,14 +3,15 @@ package Torrent;
 public class Info{
     private String name;
     private long length;
-    private Piece[] pieces;
-    private String hash;
+    private int pieceLength;
+    private byte[][] pieces;
+    private byte[] hash;
 
-    public String getHash() {
+    public byte[] getHash() {
         return hash;
     }
 
-    public void setHash(String hash) {
+    public void setHash(byte[] hash) {
         this.hash = hash;
     }
 
@@ -30,11 +31,19 @@ public class Info{
         this.name = name;
     }
 
-    public Piece[] getPieces() {
+    public byte[][] getPieces() {
         return pieces;
     }
 
-    public void setPieces(Piece[] pieces) {
+    public void setPieces(byte[][] pieces) {
         this.pieces = pieces;
+    }
+
+    public int getPieceLength() {
+        return pieceLength;
+    }
+
+    public void setPieceLength(int pieceLength) {
+        this.pieceLength = pieceLength;
     }
 }

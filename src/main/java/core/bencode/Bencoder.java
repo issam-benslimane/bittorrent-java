@@ -34,8 +34,7 @@ public class Bencoder {
         try {
             if (obj instanceof String) writeString((String) obj);
             else if(obj instanceof byte[]) writeStringBytes((byte[]) obj);
-            else if (obj instanceof Integer) writeInteger((long) obj);
-            else if (obj instanceof Long) writeInteger((long) obj);
+            else if (obj instanceof Number) writeInteger((Number) obj);
             else if (obj instanceof List) writeList((List<?>) obj);
             else if (obj instanceof Map) writeDictionary((Map<String, ?>) obj);
             else throw new RuntimeException("Unsupported Type.");
@@ -60,7 +59,7 @@ public class Bencoder {
         }
     }
 
-    private void writeInteger(long n) throws IOException {
+    private void writeInteger(Number n) throws IOException {
         encoded.add((byte) 'i');
         String s = String.valueOf(n);
         for (int i = 0; i < s.length(); i++) {

@@ -1,11 +1,8 @@
 package Tracker;
 
 import Bencode.Bdecoder;
-import org.apache.commons.codec.binary.Hex;
-import org.apache.http.HttpResponse;
-import org.apache.http.util.EntityUtils;
+import Peer;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -17,10 +14,10 @@ public class TrackerResponse {
     private Peer[] peers;
 
     public TrackerResponse(InputStream in) {
-        Bdecoder decoder = new Bdecoder(in, true);
+        Bdecoder decoder = new Bdecoder(in);
         Map<String, Object> decodedBody = (Map<String, Object>) decoder.getDecoded();
         peers = parsePeers((byte[]) decodedBody.get("peers"));
-        interval = ((Long) decodedBody.get("interval")).intValue();
+        interval = (int) decodedBody.get("interval");
     }
 
     public int getInterval() {

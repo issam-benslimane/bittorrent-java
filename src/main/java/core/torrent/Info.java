@@ -1,6 +1,8 @@
 package Torrent;
 
-public class Info{
+import org.apache.commons.codec.binary.Hex;
+
+public class  Info{
     private String name;
     private long length;
     private int pieceLength;
@@ -45,5 +47,18 @@ public class Info{
 
     public void setPieceLength(int pieceLength) {
         this.pieceLength = pieceLength;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Length: ").append(length).append("\n");
+        sb.append("Info Hash: ").append(new String(Hex.encodeHex(hash))).append("\n");
+        sb.append("Piece Length: ").append(pieceLength).append("\n");
+        sb.append("Piece Hashes:");
+        for (byte[] piece: pieces){
+            sb.append("\n").append(Hex.encodeHex(piece));
+        }
+        return sb.toString();
     }
 }

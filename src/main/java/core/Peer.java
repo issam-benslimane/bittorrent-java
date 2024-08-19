@@ -1,5 +1,3 @@
-package Tracker;
-
 import java.net.InetAddress;
 
 public class Peer {

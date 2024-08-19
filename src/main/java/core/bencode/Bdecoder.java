@@ -12,19 +12,9 @@ import java.util.Map;
 public class Bdecoder {
     private Object decoded;
     private PushbackInputStream in;
-    private boolean useBytes;
-    public Bdecoder(InputStream in, boolean useBytes) {
+    public Bdecoder(InputStream in) {
         this.in = new PushbackInputStream(in);
-        this.useBytes = useBytes;
         decoded = decodeNext();
-    }
-
-    public Bdecoder(InputStream in){
-        this(in, false);
-    }
-
-    public Bdecoder(byte[] bytes, boolean useBytes){
-        this(new ByteArrayInputStream(bytes), useBytes);
     }
 
     public Bdecoder(byte[] bytes){
@@ -38,7 +28,7 @@ public class Bdecoder {
     private Object decodeNext()  {
         try {
             int next = peek();
-            if (Character.isDigit(next)) return useBytes ? readStringBytes() : readString();
+            if (Character.isDigit(next)) return readStringBytes();
             else if(next == 'i') return readInteger();
             else if(next == 'l') return readList();
             else if(next == 'd') return readDictionary();
@@ -66,7 +56,7 @@ public class Bdecoder {
         return b;
     }
 
-    private Long readInteger() throws IOException {
+    private Number readInteger() throws IOException {
         int next = in.read();
         if (next != 'i') throw new RuntimeException("");
         StringBuilder sb = new StringBuilder();
@@ -75,7 +65,9 @@ public class Bdecoder {
             sb.append((char) next);
             next = in.read();
         }
-        return Long.parseLong(sb.toString());
+        long n = Long.parseLong(sb.toString());
+        if (n > Integer.MAX_VALUE) return n;
+        return (int) n;
     }
 
     private List<?> readList() throws IOException {
